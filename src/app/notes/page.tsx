@@ -10,8 +10,10 @@ import NotesClient from './Notes.client';
 export default async function Notes() {
   const queryClient = new QueryClient();
 
+  const queryKey = ['notes', 1, ''];
+
   await queryClient.prefetchQuery({
-    queryKey: ['notes', 1, ''],
+    queryKey,
     queryFn: () =>
       fetchNotes({
         page: 1,
@@ -19,6 +21,12 @@ export default async function Notes() {
         search: '',
       }),
   });
+
+  const queryState = queryClient.getQueryState(queryKey);
+
+  if (queryState?.status === 'error') {
+    throw queryState.error;
+  }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
