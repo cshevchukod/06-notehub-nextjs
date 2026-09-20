@@ -22,6 +22,7 @@ import css from './NotesPage.module.css';
 export default function NotesClient() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
+  const [inputValue, setInputValue] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const queryClient = useQueryClient();
@@ -61,6 +62,11 @@ export default function NotesClient() {
     setPage(1);
   }, 300);
 
+  const handleChange = (value: string) => {
+    setInputValue(value);
+    handleSearch(value);
+  };
+
   const handleCreate = (note: NewNote) => {
     createMutation.mutate(note);
   };
@@ -72,7 +78,7 @@ export default function NotesClient() {
   return (
     <main className={css.app}>
       <header className={css.toolbar}>
-        <SearchBox value={search} onChange={handleSearch} />
+        <SearchBox value={inputValue} onChange={handleChange} />
 
         <button
           className={css.button}
